@@ -12,7 +12,9 @@ export default function CharStatusCard() {
         <CardTitle>Status</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-2">
-        <div className="flex gap-2"></div>
+        <div className="flex gap-2">
+          <div>ATK: {config.atk}</div>
+        </div>
       </CardContent>
     </Card>
   );

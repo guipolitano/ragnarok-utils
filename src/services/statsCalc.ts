@@ -8,7 +8,7 @@ import {
   JobNames,
 } from "@/@types";
 
-import { IEquipment } from "@/data/equiment_table";
+import { IEquipment, weapon_atk_variance } from "@/data/equiment_table";
 import { jobData, jobTable } from "@/data/job_table";
 import {
   point_consumptions,
@@ -74,6 +74,7 @@ class Simulator {
       },
       equipment: {
         headgear_top: undefined,
+        weapon: undefined,
       },
     };
     if (typeof window !== "undefined") {
@@ -88,6 +89,7 @@ class Simulator {
     this.calcStatsTotal();
     this.calcStatsCost();
     this.calcPoints();
+    this.calcAtk();
   }
 
   updateBaseAtribute(attr: AttributesType, value: number) {
@@ -114,6 +116,59 @@ class Simulator {
         point_consumptions[this.char.stats[stat as AttributesType].base];
     });
     this.char.remaining_points = this.char.total_points - consumedPoints;
+  }
+
+  private calcAtk() {
+    const status_atk = this.calcStatusAtk();
+    const weapon_atk = this.calcWeaponAtk();
+    console.log(status_atk);
+  }
+
+  private calcWeaponAtk() {
+    if (this.char.equipment.weapon) {
+      const base_weapon_atk = this.char.equipment.weapon?.equipment?.atk || 0;
+      const atk_variance = this.floor(
+        (base_weapon_atk *
+          weapon_atk_variance[
+            this.char.equipment.weapon.equipment?.lv as 1 | 2 | 3 | 4
+          ]) /
+          100
+      );
+      const stat_bonus = this.isRanged()
+        ? base_weapon_atk * this.floor(this.char.stats.dex.total / 200)
+        : base_weapon_atk * this.floor(this.char.stats.str.total / 200);
+      this.char.atk = (base_weapon_atk || 0) + stat_bonus;
+    }
+  }
+
+  private calcStatusAtk() {
+    if (this.isRanged()) {
+      return this.floor(
+        this.floor(this.char.base_lv / 4) +
+          this.floor(this.char.stats.str.total / 5) +
+          this.char.stats.dex.total +
+          this.floor(this.char.stats.luk.total / 3)
+      );
+    }
+    return this.floor(
+      this.floor(this.char.base_lv / 4) +
+        this.char.stats.str.total +
+        this.floor(this.char.stats.dex.total / 5) +
+        this.floor(this.char.stats.luk.total / 3)
+    );
+  }
+
+  private isRanged() {
+    return [
+      "bow",
+      "instrument",
+      "whip",
+      "pistol",
+      "rifle",
+      "gatling_gun",
+      "shotgun",
+      "grenade_launcher",
+    ]?.includes(this.char.equipment.weapon?.equipment?.weapon_type || "");
   }
 
   private isRebirth() {
@@ -230,6 +285,10 @@ class Simulator {
         },
       },
     };
+  }
+
+  private floor(value: number) {
+    return Math.floor(value);
   }
 }
 

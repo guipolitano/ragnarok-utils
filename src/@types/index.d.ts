@@ -128,13 +128,39 @@ export interface ICharEquipment {
   refine?: number;
 }
 
+export type IWeaponTypes =
+  | "dagger"
+  | "1h_sword"
+  | "2h_sword"
+  | "1h_spear"
+  | "2h_spear"
+  | "1h_axe"
+  | "2h_axe"
+  | "mace"
+  | "1h_staff"
+  | "2h_staff"
+  | "bow"
+  | "claw"
+  | "instrument"
+  | "whip"
+  | "book"
+  | "katar"
+  | "pistol"
+  | "rifle"
+  | "gatling_gun"
+  | "shotgun"
+  | "grenade_launcher"
+  | "huuma";
+
 export type IEquipmentPositions =
   | "headgear_top"
   | "headgear_mid"
   | "headgear_bot"
   | "armor"
   | "footgear"
-  | "garment";
+  | "garment"
+  | "weapon"
+  | "shield";
 
 export interface IChar {
   name?: string;
