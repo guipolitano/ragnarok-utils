@@ -1,4 +1,4 @@
-import { IRefineStep } from "@/@types";
+import { IChar, IRefineStep } from "@/@types";
 import { atom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 
@@ -35,7 +35,7 @@ export const bsbDataAtom = atom<IRefineStep[]>([]);
 
 export const eluniumDataAtom = atom<IRefineStep[]>([]);
 
-export const charAtom = atomWithStorage("@char-build", {
+export const charAtom = atomWithStorage<IChar>("@char-build", {
   job: "novice",
   base_lv: 1,
   job_lv: 1,
@@ -87,5 +87,8 @@ export const charAtom = atomWithStorage("@char-build", {
       bonus: 0,
       total: 0,
     },
+  },
+  equipment: {
+    headgear_top: undefined,
   },
 });

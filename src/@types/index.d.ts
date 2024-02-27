@@ -1,3 +1,5 @@
+import { IEquipment } from "@/data/equiment_table";
+
 export interface IRefineStep {
   [key: string]: number | string;
 }
@@ -115,6 +117,25 @@ export type IStats = {
   };
 };
 
+export interface ICard {
+  id: number;
+  name?: string;
+}
+
+export interface ICharEquipment {
+  equipment?: IEquipment;
+  card?: ICard;
+  refine?: number;
+}
+
+export type IEquipmentPositions =
+  | "headgear_top"
+  | "headgear_mid"
+  | "headgear_bot"
+  | "armor"
+  | "footgear"
+  | "garment";
+
 export interface IChar {
   name?: string;
   hp: number;
@@ -132,6 +153,7 @@ export interface IChar {
   remaining_points: number;
   job_lv: number;
   stats: IStats;
+  equipment: { [key in IEquipmentPositions]?: ICharEquipment };
 }
 
 export type JobDataTable = {
@@ -157,3 +179,13 @@ export type JobDataTable = {
     shield_aspd_penaly?: number;
   };
 };
+
+export interface IOption {
+  label: string;
+  value: string | number;
+}
+
+export interface IGroupOption {
+  label: string;
+  options: IOption[];
+}

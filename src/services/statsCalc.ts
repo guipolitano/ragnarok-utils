@@ -1,4 +1,14 @@
-import { AttributesType, IChar, JobNames } from "@/@types";
+"use client";
+
+import {
+  AttributesType,
+  ICard,
+  IChar,
+  IEquipmentPositions,
+  JobNames,
+} from "@/@types";
+
+import { IEquipment } from "@/data/equiment_table";
 import { jobData, jobTable } from "@/data/job_table";
 import {
   point_consumptions,
@@ -62,15 +72,22 @@ class Simulator {
           total: 0,
         },
       },
+      equipment: {
+        headgear_top: undefined,
+      },
     };
+    if (typeof window !== "undefined") {
+      this.char = JSON.parse(localStorage.getItem("@char-build") || "{}");
+    }
+    this.recalc();
   }
 
   recalc() {
     this.resetStatsBonus();
     this.calcStatsBonus();
     this.calcStatsTotal();
-    this.calcPoints();
     this.calcStatsCost();
+    this.calcPoints();
   }
 
   updateBaseAtribute(attr: AttributesType, value: number) {
@@ -83,7 +100,6 @@ class Simulator {
     jobTable[this.char.job]
       .filter((jt) => jt[0] <= this.char.job_lv)
       .map((jt) => {
-        console.log("entrou");
         this.char.stats[jt[1]].bonus += 1;
       });
   }
@@ -120,6 +136,30 @@ class Simulator {
     });
   }
 
+  setEquipmentRefine(refine: number, position: IEquipmentPositions) {
+    this.char.equipment[position] = {
+      ...this.char.equipment[position],
+      refine,
+    };
+    this.recalc();
+  }
+
+  setEquipment(equip: IEquipment, position: IEquipmentPositions) {
+    this.char.equipment[position] = {
+      ...this.char.equipment[position],
+      equipment: equip,
+    };
+    this.recalc();
+  }
+
+  setEquipmentCard(card: ICard, position: IEquipmentPositions) {
+    this.char.equipment[position] = {
+      ...this.char.equipment[position],
+      card,
+    };
+    this.recalc();
+  }
+
   setJob(job: JobNames) {
     this.char.job = job;
     this.recalc();
@@ -140,6 +180,7 @@ class Simulator {
   }
 
   getChar() {
+    this.recalc();
     return this.char;
   }
 
