@@ -1,4 +1,4 @@
-import { AttributesType, Char, JobNames } from "@/@types";
+import { AttributesType, IChar, JobNames } from "@/@types";
 import { jobData, jobTable } from "@/data/job_table";
 import {
   point_consumptions,
@@ -6,8 +6,8 @@ import {
   reward_rebirth_points,
 } from "@/data/stat_table";
 
-export class Simulator {
-  private char: Char = {} as Char;
+class Simulator {
+  char: IChar = {} as IChar;
   constructor() {
     this.char = {
       job: "novice",
@@ -83,6 +83,7 @@ export class Simulator {
     jobTable[this.char.job]
       .filter((jt) => jt[0] <= this.char.job_lv)
       .map((jt) => {
+        console.log("entrou");
         this.char.stats[jt[1]].bonus += 1;
       });
   }
@@ -142,6 +143,10 @@ export class Simulator {
     return this.char;
   }
 
+  getAttribute(attribute: AttributesType) {
+    return this.char.stats[attribute];
+  }
+
   private resetStatsBonus() {
     this.char = {
       ...this.char,
@@ -186,3 +191,7 @@ export class Simulator {
     };
   }
 }
+
+const simulator = new Simulator();
+
+export default simulator;

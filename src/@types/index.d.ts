@@ -115,7 +115,7 @@ export type IStats = {
   };
 };
 
-export interface Char {
+export interface IChar {
   name?: string;
   hp: number;
   sp: number;
@@ -138,15 +138,22 @@ export type JobDataTable = {
   [key in JobNames]: {
     name: string;
     rebirth: boolean;
-    prev_job?: JobNames;
+    category:
+      | "novice"
+      | "first_job"
+      | "second_job"
+      | "first_job_trans"
+      | "second_job_trans"
+      | "expanded";
     max_job_lv: number;
+    prev_job?: JobNames | null;
     base_hp: number[];
-    base_sp: number[];
-    sp_mod: number[];
-    base_aspd: number;
-    weapon_aspd_penalty: {
+    base_sp?: number[];
+    sp_mod?: number[];
+    base_aspd?: number;
+    weapon_aspd_penalty?: {
       [key in WeaponsType]: number;
     };
-    shield_aspd_penaly: number;
+    shield_aspd_penaly?: number;
   };
 };
